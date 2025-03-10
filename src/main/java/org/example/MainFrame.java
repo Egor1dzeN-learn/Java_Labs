@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- *
  * @author egorm
  */
 public class MainFrame extends javax.swing.JFrame {
@@ -50,7 +49,7 @@ public class MainFrame extends javax.swing.JFrame {
         jlabel6 = new javax.swing.JLabel();
         countShot2 = new javax.swing.JLabel();
         shot = new javax.swing.JButton();
-        canvas1 = new MyCanvas(4,3, countShot1, countShot2, score1, score2);
+        canvas1 = new MyCanvas(4, 3, countShot1, countShot2, score1, score2);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         ready.setText("Готов");
@@ -65,7 +64,12 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         stop.setText("Остановить");
-
+        stop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                stopClicked(evt);
+            }
+        });
+        stop.setEnabled(false);
         jlabel1.setText("Игрок");
 
         player1.setText("player1");
@@ -101,73 +105,73 @@ public class MainFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(ready)
-                        .addGap(18, 18, 18)
-                        .addComponent(stop)
-                        .addGap(18, 18, 18)
-                        .addComponent(shot))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(player1)
-                            .addComponent(jlabel1)
-                            .addComponent(score1)
-                            .addComponent(jlabel2)
-                            .addComponent(countShot1)
-                            .addComponent(jlabel3)
-                            .addComponent(player2)
-                            .addComponent(jlabel4)
-                            .addComponent(score2)
-                            .addComponent(jlabel5)
-                            .addComponent(countShot2)
-                            .addComponent(jlabel6))))
-                .addContainerGap(79, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(21, 21, 21)
+                                                .addComponent(ready)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(stop)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(shot))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(player1)
+                                                        .addComponent(jlabel1)
+                                                        .addComponent(score1)
+                                                        .addComponent(jlabel2)
+                                                        .addComponent(countShot1)
+                                                        .addComponent(jlabel3)
+                                                        .addComponent(player2)
+                                                        .addComponent(jlabel4)
+                                                        .addComponent(score2)
+                                                        .addComponent(jlabel5)
+                                                        .addComponent(countShot2)
+                                                        .addComponent(jlabel6))))
+                                .addContainerGap(79, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jlabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(player1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(score1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(countShot1)
-                        .addGap(44, 44, 44)
-                        .addComponent(jlabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(player2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(score2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(countShot2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ready)
-                    .addComponent(stop)
-                    .addComponent(shot))
-                .addGap(20, 20, 20))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(22, 22, 22)
+                                                .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(32, 32, 32)
+                                                .addComponent(jlabel1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(player1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jlabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(score1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jlabel3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(countShot1)
+                                                .addGap(44, 44, 44)
+                                                .addComponent(jlabel4)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(player2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jlabel5)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(score2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jlabel6)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(countShot2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(ready)
+                                        .addComponent(stop)
+                                        .addComponent(shot))
+                                .addGap(20, 20, 20))
         );
 
         pack();
@@ -175,9 +179,23 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void readyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_readyMouseClicked
         // TODO add your handling code here:
+        myThread.setStart(true);
+        ready.setEnabled(false);
+        stop.setEnabled(true);
+
 //        System.out.println(((InfiniteMovementExample)canvas1).getCircleX());
-        
+
     }//GEN-LAST:event_readyMouseClicked
+
+    private void stopClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_readyMouseClicked
+        // TODO add your handling code here:
+        myThread.setStart(false);
+        stop.setEnabled(false);
+        ready.setEnabled(true);
+//        System.out.println(((InfiniteMovementExample)canvas1).getCircleX());
+
+    }
+
     private void shotClicked(java.awt.event.MouseEvent evt) {
         myThread.setShot(true);
     }
@@ -189,7 +207,7 @@ public class MainFrame extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

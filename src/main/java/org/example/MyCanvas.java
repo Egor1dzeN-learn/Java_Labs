@@ -1,6 +1,7 @@
 package org.example;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Getter
+@Setter
 public class MyCanvas extends JPanel implements ActionListener {
     private final int radius1 = 50;
     private final int radius2 = 30;
@@ -26,6 +28,7 @@ public class MyCanvas extends JPanel implements ActionListener {
     private int countShot2_;
     private int score1_;
     private int score2_;
+    private boolean start = false;
     public MyCanvas(int speedY1, int speedY2, JLabel countShot1, JLabel countShot2, JLabel score1, JLabel score2) {
         this.speedY1 = speedY1;
         this.speedY2 = speedY2;
@@ -45,41 +48,44 @@ public class MyCanvas extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e != null && e.getActionCommand().equals("shot")) {
-            speedArrowX = 2;
-            countShot1_++;
-            countShot1.setText(countShot1_+" ");
-        }
-        circleY1 += speedY1;
-        circleY2 += speedY2;
-        if (circleY1 + radius1 > getHeight() || circleY1 < 0) {
-            speedY1 *= -1; // Меняем направление по Y
-        }
-        if (circleY2 + radius2 > getHeight() || circleY2 < 0) {
-            speedY2 *= -1; // Меняем направление по Y
-        }
-        posArrowX += speedArrowX;
+        if (start){
+            if (e != null && e.getActionCommand().equals("shot")) {
+                speedArrowX = 2;
+                countShot1_++;
+                countShot1.setText(countShot1_+" ");
+            }
+            circleY1 += speedY1;
+            circleY2 += speedY2;
+            if (circleY1 + radius1 > getHeight() || circleY1 < 0) {
+                speedY1 *= -1; // Меняем направление по Y
+            }
+            if (circleY2 + radius2 > getHeight() || circleY2 < 0) {
+                speedY2 *= -1; // Меняем направление по Y
+            }
+            posArrowX += speedArrowX;
 //        System.out.println("Width: " + getWidth());
 //        System.out.println("Pos Arrow:" + posArrowX + ", " + (posArrowX + 30 > getWidth()));
-        if ((posArrowX + 30 > getWidth() || posArrowX < 0) && getWidth() > 0) {
-            speedArrowX = 0;
-            posArrowX = 30;
-        }
-        if (posArrowX + 30 >= getWidth() * 0.7 && posArrowX<= getWidth() * 0.7 + radius1 && getHeight()/2 >= circleY1 && getHeight()/2 <= circleY1 + radius1){
-            posArrowX = 30;
-            speedArrowX = 0;
+            if ((posArrowX + 30 > getWidth() || posArrowX < 0) && getWidth() > 0) {
+                speedArrowX = 0;
+                posArrowX = 30;
+            }
+            if (posArrowX + 30 >= getWidth() * 0.7 && posArrowX<= getWidth() * 0.7 + radius1 && getHeight()/2 >= circleY1 && getHeight()/2 <= circleY1 + radius1){
+                posArrowX = 30;
+                speedArrowX = 0;
 //            System.out.println("Catch");
-            score1_++;
-            score1.setText(score1_+" ");
-        }
-        if (posArrowX + 30 >= getWidth() * 0.85 && posArrowX<= getWidth() * 0.85 + radius2 && getHeight()/2 >= circleY2 && getHeight()/2 <= circleY2 + radius2){
-            posArrowX = 30;
-            speedArrowX = 0;
+                score1_++;
+                score1.setText(score1_+" ");
+            }
+            if (posArrowX + 30 >= getWidth() * 0.85 && posArrowX<= getWidth() * 0.85 + radius2 && getHeight()/2 >= circleY2 && getHeight()/2 <= circleY2 + radius2){
+                posArrowX = 30;
+                speedArrowX = 0;
 //            System.out.println("Catch");
-            score1_+=2;
-            score1.setText(score1_+" ");
+                score1_+=2;
+                score1.setText(score1_+" ");
+            }
+            repaint();
         }
-        repaint();
+
     }
 
     @Override

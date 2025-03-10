@@ -12,6 +12,7 @@ import java.time.Duration;
 public class MyThread extends Thread {
     private MyCanvas myCanvas;
     private boolean shot;
+    private boolean start = false;
 
     MyThread(MyCanvas myCanvas) {
         this.myCanvas = myCanvas;
@@ -21,6 +22,7 @@ public class MyThread extends Thread {
     public void run() {
         super.run();
         while (true) {
+            myCanvas.setStart(start);
             if (shot) {
                 myCanvas.actionPerformed(new ActionEvent(new Object(), 0, "shot"));
                 shot = false;
