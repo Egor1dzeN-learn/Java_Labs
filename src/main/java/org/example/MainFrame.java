@@ -174,8 +174,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void readyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_readyMouseClicked
-        // TODO add your handling code here:
-//        System.out.println(((InfiniteMovementExample)canvas1).getCircleX());
+
         
     }//GEN-LAST:event_readyMouseClicked
     private void shotClicked(java.awt.event.MouseEvent evt) {
