@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package org.example;
 
 import javax.swing.*;
@@ -177,22 +173,18 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void readyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_readyMouseClicked
-        // TODO add your handling code here:
+    private void readyMouseClicked(java.awt.event.MouseEvent evt) {
+
         myThread.setStart(true);
         ready.setEnabled(false);
         stop.setEnabled(true);
+    }
 
-//        System.out.println(((InfiniteMovementExample)canvas1).getCircleX());
-
-    }//GEN-LAST:event_readyMouseClicked
-
-    private void stopClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_readyMouseClicked
+    private void stopClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
         myThread.setStart(false);
         stop.setEnabled(false);
         ready.setEnabled(true);
-//        System.out.println(((InfiniteMovementExample)canvas1).getCircleX());
 
     }
 
@@ -204,7 +196,6 @@ public class MainFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
@@ -227,7 +218,6 @@ public class MainFrame extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame().setVisible(true);
@@ -235,7 +225,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private MyCanvas canvas1;
     private javax.swing.JLabel countShot1;
     private javax.swing.JLabel countShot2;
@@ -252,5 +241,4 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel score2;
     private javax.swing.JButton shot;
     private javax.swing.JButton stop;
-    // End of variables declaration//GEN-END:variables
 }

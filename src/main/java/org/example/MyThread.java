@@ -29,7 +29,6 @@ public class MyThread extends Thread {
             } else {
                 myCanvas.actionPerformed(null);
             }
-//            System.out.println(running);
             try {
                 Thread.sleep(Duration.ofMillis(10));
             } catch (InterruptedException e) {
