@@ -1,5 +1,7 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,6 +38,11 @@ public class MyCanvas extends JPanel implements ActionListener {
     private int score2_;
     private boolean start = false;
 
+    private BufferedReader in;
+    private PrintWriter out;
+    private ArrayList<Player> playerList = new ArrayList<>();
+    private Type type;
+
     public MyCanvas(int speedY1, int speedY2, JLabel countShot1, JLabel countShot2, JLabel score1, JLabel score2) {
         this.speedY1 = speedY1;
         this.speedY2 = speedY2;
@@ -44,6 +57,7 @@ public class MyCanvas extends JPanel implements ActionListener {
         this.score2.setText(score2_+" ");
 
         Graphics g = this.getGraphics();
+        type = new TypeToken<ArrayList<Player>>() {}.getType();
 
     }
 
@@ -79,6 +93,17 @@ public class MyCanvas extends JPanel implements ActionListener {
                 speedArrowX = 0;
                 score1_+=2;
                 score1.setText(score1_+" ");
+            }
+            ObjectDTO objectDTO = new ObjectDTO(TypeObjectDTO.POSITION, MainFrame.name, posArrowX+"");
+            Gson gson = GsonFactory.getInstance();
+            out.println(gson.toJson(objectDTO));
+            try {
+                String data = in.readLine();
+                System.out.println("From server: "+data);
+                playerList = gson.fromJson(data, type);
+                System.out.println(playerList);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
             repaint();
         }

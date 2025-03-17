@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.time.Duration;
 
 @Getter
@@ -13,6 +15,8 @@ public class MyThread extends Thread {
     private MyCanvas myCanvas;
     private boolean shot;
     private boolean start = false;
+    private BufferedReader in;
+    private PrintWriter out;
 
     MyThread(MyCanvas myCanvas) {
         this.myCanvas = myCanvas;
@@ -21,6 +25,8 @@ public class MyThread extends Thread {
     @Override
     public void run() {
         super.run();
+        myCanvas.setIn(in);
+        myCanvas.setOut(out);
         while (true) {
             myCanvas.setStart(start);
             if (shot) {
