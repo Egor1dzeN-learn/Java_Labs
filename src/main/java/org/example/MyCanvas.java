@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 public class MyCanvas extends JPanel implements ActionListener {
+    private final MainFrame frame;
     private final int radius1 = 50;
     private final int radius2 = 30;
     private int ratio;
@@ -43,31 +43,32 @@ public class MyCanvas extends JPanel implements ActionListener {
     private ArrayList<Player> playerList = new ArrayList<>();
     private Type type;
 
-    public MyCanvas(int speedY1, int speedY2, JLabel countShot1, JLabel countShot2, JLabel score1, JLabel score2) {
+    public MyCanvas(MainFrame frame, int speedY1, int speedY2, JLabel countShot1, JLabel countShot2, JLabel score1, JLabel score2) {
+        this.frame = frame;
         this.speedY1 = speedY1;
         this.speedY2 = speedY2;
         this.countShot1 = countShot1;
         this.countShot2 = countShot2;
         this.score1 = score1;
         this.score2 = score2;
-        this.countShot1.setText(countShot1_+" ");
+        this.countShot1.setText(countShot1_ + " ");
         System.out.println("contr");
-        this.countShot2.setText(countShot2_+" ");
-        this.score1.setText(score1_+" ");
-        this.score2.setText(score2_+" ");
+        this.countShot2.setText(countShot2_ + " ");
+        this.score1.setText(score1_ + " ");
+        this.score2.setText(score2_ + " ");
 
-        Graphics g = this.getGraphics();
-        type = new TypeToken<ArrayList<Player>>() {}.getType();
-
+        type = new TypeToken<ArrayList<Player>>() {
+        }.getType();
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (start){
+        if (start) {
             if (e != null && e.getActionCommand().equals("shot")) {
                 speedArrowX = 2;
                 countShot1_++;
-                countShot1.setText(countShot1_+" ");
+                countShot1.setText(countShot1_ + " ");
             }
             circleY1 += speedY1;
             circleY2 += speedY2;
@@ -82,24 +83,24 @@ public class MyCanvas extends JPanel implements ActionListener {
                 speedArrowX = 0;
                 posArrowX = 30;
             }
-            if (posArrowX + 30 >= getWidth() * 0.7 && posArrowX<= getWidth() * 0.7 + radius1 && getHeight()/2 >= circleY1 && getHeight()/2 <= circleY1 + radius1){
+            if (posArrowX + 30 >= getWidth() * 0.7 && posArrowX <= getWidth() * 0.7 + radius1 && getHeight() / 2 >= circleY1 && getHeight() / 2 <= circleY1 + radius1) {
                 posArrowX = 30;
                 speedArrowX = 0;
                 score1_++;
-                score1.setText(score1_+" ");
+                score1.setText(score1_ + " ");
             }
-            if (posArrowX + 30 >= getWidth() * 0.85 && posArrowX<= getWidth() * 0.85 + radius2 && getHeight()/2 >= circleY2 && getHeight()/2 <= circleY2 + radius2){
+            if (posArrowX + 30 >= getWidth() * 0.85 && posArrowX <= getWidth() * 0.85 + radius2 && getHeight() / 2 >= circleY2 && getHeight() / 2 <= circleY2 + radius2) {
                 posArrowX = 30;
                 speedArrowX = 0;
-                score1_+=2;
-                score1.setText(score1_+" ");
+                score1_ += 2;
+                score1.setText(score1_ + " ");
             }
-            ObjectDTO objectDTO = new ObjectDTO(TypeObjectDTO.POSITION, MainFrame.name, posArrowX+"");
+            ObjectDTO objectDTO = new ObjectDTO(TypeObjectDTO.POSITION, MainFrame.name, posArrowX + ":" + score1_ + ":" + countShot1_);
             Gson gson = GsonFactory.getInstance();
             out.println(gson.toJson(objectDTO));
             try {
                 String data = in.readLine();
-                System.out.println("From server: "+data);
+                System.out.println("From server: " + data);
                 playerList = gson.fromJson(data, type);
                 System.out.println(playerList);
             } catch (IOException ex) {
@@ -114,11 +115,22 @@ public class MyCanvas extends JPanel implements ActionListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.GRAY);
-        g.drawLine((int)(getWidth()*0.7) + radius1/2, 0, (int)(getWidth()*0.7) + radius1/2, getHeight());
-        g.drawLine((int)(getWidth()*0.85) + radius2/2, 0, (int)(getWidth()*0.85) + radius2/2, getHeight());
+        g.drawLine((int) (getWidth() * 0.7) + radius1 / 2, 0, (int) (getWidth() * 0.7) + radius1 / 2, getHeight());
+        g.drawLine((int) (getWidth() * 0.85) + radius2 / 2, 0, (int) (getWidth() * 0.85) + radius2 / 2, getHeight());
         paintCircle(g, 0.7, circleY1, radius1);
         paintCircle(g, 0.85, circleY2, radius2);
-        paintArrow(g, posArrowX);
+        for (Player player : playerList) {
+            paintArrow(g, player.getX(), player.getName().equals(MainFrame.name) ? Color.YELLOW : Color.RED);
+            if (!player.getName().equals(MainFrame.name)) {
+                frame.getPlayer2().setText(player.getName());
+                frame.getScore2().setText(player.getScore() + "");
+                frame.getCountShot2().setText(player.getCountShot() + "");
+                if (player.getScore() >= Server.NEED_SCORE) {
+//                    ToDO: cont here
+                }
+            }
+        }
+
 
     }
 
@@ -127,8 +139,8 @@ public class MyCanvas extends JPanel implements ActionListener {
         g.fillOval((int) (getWidth() * ratio), posY, radius, radius);
     }
 
-    private void paintArrow(Graphics g, int posX) {
-        g.setColor(Color.YELLOW);
+    private void paintArrow(Graphics g, int posX, Color color) {
+        g.setColor(color);
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setStroke(new BasicStroke(3));

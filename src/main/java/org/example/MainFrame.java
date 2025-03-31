@@ -1,6 +1,7 @@
 package org.example;
 
 import com.google.gson.Gson;
+import lombok.Getter;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -14,12 +15,13 @@ import java.net.Socket;
  */
 
 public class MainFrame extends javax.swing.JFrame {
-    private MyThread myThread;
+    private final MyThread myThread;
     public static Socket socket;
     public static String name;
     public static Color color;
     private BufferedReader in;
     private PrintWriter out;
+
     /**
      * Creates new form MainFrame
      */
@@ -35,6 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        this.player1.setText(name);
     }
 
     /**
@@ -61,7 +64,7 @@ public class MainFrame extends javax.swing.JFrame {
         jlabel6 = new javax.swing.JLabel();
         countShot2 = new javax.swing.JLabel();
         shot = new javax.swing.JButton();
-        canvas1 = new MyCanvas(4, 3, countShot1, countShot2, score1, score2);
+        canvas1 = new MyCanvas(this, 4, 3, countShot1, countShot2, score1, score2);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         ready.setText("Готов");
@@ -194,7 +197,7 @@ public class MainFrame extends javax.swing.JFrame {
         ObjectDTO objectDTO = new ObjectDTO(TypeObjectDTO.READY, name, "");
         Gson gson = GsonFactory.getInstance();
         String data = gson.toJson(objectDTO);
-        System.out.println("Send: "+data);
+        System.out.println("Send: " + data);
         out.println(data);
 
         try {
@@ -254,7 +257,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private MyCanvas canvas1;
+
     private javax.swing.JLabel countShot1;
+    @Getter
     private javax.swing.JLabel countShot2;
     private javax.swing.JLabel jlabel1;
     private javax.swing.JLabel jlabel2;
@@ -262,11 +267,16 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jlabel4;
     private javax.swing.JLabel jlabel5;
     private javax.swing.JLabel jlabel6;
+    @Getter
     private javax.swing.JLabel player1;
+    @Getter
     private javax.swing.JLabel player2;
     private javax.swing.JButton ready;
+    @Getter
     private javax.swing.JLabel score1;
+    @Getter
     private javax.swing.JLabel score2;
     private javax.swing.JButton shot;
     private javax.swing.JButton stop;
+
 }

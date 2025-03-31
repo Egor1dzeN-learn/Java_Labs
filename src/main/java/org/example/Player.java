@@ -3,7 +3,6 @@ package org.example;
 import lombok.Data;
 import lombok.ToString;
 
-import java.awt.*;
 import java.util.Objects;
 
 @Data
@@ -12,6 +11,8 @@ public class Player {
     private String name;
     private int x;
     private int y = 1;
+    private int score = 0;
+    private int countShot = 0;
 
     @Override
     public boolean equals(Object o) {

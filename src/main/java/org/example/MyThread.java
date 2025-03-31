@@ -3,7 +3,6 @@ package org.example;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -13,6 +12,7 @@ import java.time.Duration;
 @Setter
 public class MyThread extends Thread {
     private MyCanvas myCanvas;
+    private MainFrame mainFrame;
     private boolean shot;
     private boolean start = false;
     private BufferedReader in;

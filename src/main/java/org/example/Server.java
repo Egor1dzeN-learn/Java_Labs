@@ -9,17 +9,19 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class Server {
-    public static List<Socket> sockets = new ArrayList<Socket>();
-    public static volatile List<Player> playerList = new ArrayList<>();
+    public static List<Socket> sockets = new ArrayList<>();
+    public static final List<Player> playerList = new ArrayList<>();
+    public static final int PLAYER_COUNT = 2;
+    public static final int NEED_SCORE = 10;
+    public static boolean isEnd = false;
 
     public static void main(String[] args) {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(2);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(PLAYER_COUNT);
         try (ServerSocket serverSocket = new ServerSocket(8080)) {
             System.out.println("Server is working, " + serverSocket.getLocalSocketAddress());
             while (true) {
@@ -33,13 +35,11 @@ public class Server {
                         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                         Gson gson = GsonFactory.getInstance();
                         ObjectDTO objectDTO;
-                        while (true) {
+                        do {
                             String data = in.readLine();
                             objectDTO = gson.fromJson(data, ObjectDTO.class);
                             System.out.println(objectDTO);
-                            if (objectDTO.getType() == TypeObjectDTO.READY)
-                                break;
-                        }
+                        } while (objectDTO.getType() != TypeObjectDTO.READY);
                         cyclicBarrier.await();
                         out.println(gson.toJson(new ObjectDTO(TypeObjectDTO.READY, objectDTO.getName(), "")));
                         String data = in.readLine();
@@ -48,21 +48,30 @@ public class Server {
                         Player player = new Player();
                         if (objectDTO.getType() == TypeObjectDTO.POSITION) {
                             player.setName(objectDTO.getName());
-//                          player.setColor(objectDTO.getColor());
-                            player.setX(Integer.parseInt(objectDTO.getData()));
-                            playerList.add(player);
+                            String[] strings = objectDTO.getData().split(":");
+                            player.setX(Integer.parseInt(strings[0]));
+                            player.setScore(Integer.parseInt(strings[1]));
+                            player.setCountShot(Integer.parseInt(strings[2]));
+                            synchronized (playerList) {
+                                playerList.add(player);
+                            }
                             out.println(gson.toJson(playerList));
-                            System.out.println("New player "+player);
+
+
+                            System.out.println("New player " + player + ", current list: " + playerList);
                         }
-                        while (true){
+                        while (true) {
                             data = in.readLine();
                             objectDTO = gson.fromJson(data, ObjectDTO.class);
-                            System.out.println("New info "+objectDTO);
+                            System.out.println("New info " + objectDTO);
                             player.setName(objectDTO.getName());
 //                          player.setColor(objectDTO.getColor());
-                            player.setX(Integer.parseInt(objectDTO.getData()));
+                            String[] strings = objectDTO.getData().split(":");
+                            player.setX(Integer.parseInt(strings[0]));
+                            player.setScore(Integer.parseInt(strings[1]));
+                            player.setCountShot(Integer.parseInt(strings[2]));
                             out.println(gson.toJson(playerList));
-                            System.out.println("Send player list "+playerList);
+                            System.out.println("Send player list " + playerList);
                         }
                     } catch (IOException e) {
                         System.err.println("Connection is failed!");
@@ -75,9 +84,5 @@ public class Server {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private void handle(Socket mySocket, Socket otherSocket) {
-
     }
 }
