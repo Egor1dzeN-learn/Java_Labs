@@ -1,6 +1,13 @@
 package org.example;
 
 import com.google.gson.Gson;
+import org.example.Entity.ObjectDTO;
+import org.example.Entity.Player;
+import org.example.Entity.PlayerDB;
+import org.example.Entity.TypeObjectDTO;
+import org.example.Repositories.PlayerRepositories;
+import org.example.Services.GsonFactory;
+import org.example.Services.HibernateUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +25,7 @@ public class Server {
     public static final List<Player> playerList = new ArrayList<>();
     public static final int PLAYER_COUNT = 2;
     public static final int NEED_SCORE = 10;
-    public static boolean isEnd = false;
+    private static final PlayerRepositories playerRepositories = new PlayerRepositories();
 
     public static void main(String[] args) {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(PLAYER_COUNT);
@@ -43,8 +50,9 @@ public class Server {
                         cyclicBarrier.await();
                         out.println(gson.toJson(new ObjectDTO(TypeObjectDTO.READY, objectDTO.getName(), "")));
                         String data = in.readLine();
+                        System.out.println(data);
                         objectDTO = gson.fromJson(data, ObjectDTO.class);
-                        System.out.println(objectDTO);
+//                        System.out.println(objectDTO);
                         Player player = new Player();
                         if (objectDTO.getType() == TypeObjectDTO.POSITION) {
                             player.setName(objectDTO.getName());
@@ -54,16 +62,18 @@ public class Server {
                             player.setCountShot(Integer.parseInt(strings[2]));
                             synchronized (playerList) {
                                 playerList.add(player);
+                                out.println(gson.toJson(playerList));
                             }
-                            out.println(gson.toJson(playerList));
+//                            System.out.println(playerList == null);
 
 
-                            System.out.println("New player " + player + ", current list: " + playerList);
+
+//                            System.out.println("New player " + player + ", current list: " + playerList);
                         }
                         while (true) {
                             data = in.readLine();
                             objectDTO = gson.fromJson(data, ObjectDTO.class);
-                            System.out.println("New info " + objectDTO);
+//                            System.out.println("New info " + objectDTO);
                             player.setName(objectDTO.getName());
 //                          player.setColor(objectDTO.getColor());
                             String[] strings = objectDTO.getData().split(":");
@@ -71,7 +81,18 @@ public class Server {
                             player.setScore(Integer.parseInt(strings[1]));
                             player.setCountShot(Integer.parseInt(strings[2]));
                             out.println(gson.toJson(playerList));
-                            System.out.println("Send player list " + playerList);
+//                            System.out.println("Send player list " + playerList);
+//                            System.out.println("count: "+player.getCountShot());
+                            if (player.getScore() >= Server.NEED_SCORE){
+                                playerRepositories.incScore(player.getName());
+                                return;
+                            }
+                            for (Player player_ : playerList) {
+                                if (player_.getScore() >= Server.NEED_SCORE){
+                                    System.out.println(player_.getName() +" win!!");
+                                    return;
+                                }
+                            }
                         }
                     } catch (IOException e) {
                         System.err.println("Connection is failed!");

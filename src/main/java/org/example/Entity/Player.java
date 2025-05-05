@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Entity;
 
 import lombok.Data;
 import lombok.ToString;
@@ -8,6 +8,7 @@ import java.util.Objects;
 @Data
 @ToString
 public class Player {
+
     private String name;
     private int x;
     private int y = 1;

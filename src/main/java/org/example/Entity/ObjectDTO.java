@@ -1,10 +1,7 @@
-package org.example;
+package org.example.Entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.swing.plaf.synth.ColorType;
-import java.awt.*;
 
 @Data
 @NoArgsConstructor

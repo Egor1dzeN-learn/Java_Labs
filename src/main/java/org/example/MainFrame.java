@@ -2,6 +2,11 @@ package org.example;
 
 import com.google.gson.Gson;
 import lombok.Getter;
+import org.example.Entity.ObjectDTO;
+import org.example.Entity.TypeObjectDTO;
+import org.example.Services.GsonFactory;
+import org.example.Services.MyCanvas;
+import org.example.Services.MyThread;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -50,6 +55,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         ready = new javax.swing.JButton();
         stop = new javax.swing.JButton();
+        cont = new javax.swing.JButton();
+        score = new javax.swing.JButton();
 
         jlabel1 = new javax.swing.JLabel();
         player1 = new javax.swing.JLabel();
@@ -85,6 +92,21 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         stop.setEnabled(false);
+        cont.setText("Продолжить");
+        cont.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                myThread.setStart(true);
+                stop.setEnabled(true);
+                cont.setEnabled(false);
+            }
+        });
+        score.setText("Таблица игроков");
+        score.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                new ScoreTable().setVisible(true);
+            }
+        });
+//        score.setEnabled(false);
         jlabel1.setText("Игрок");
 
         player1.setText("player1");
@@ -127,9 +149,13 @@ public class MainFrame extends javax.swing.JFrame {
                                                 .addGap(21, 21, 21)
                                                 .addComponent(ready)
                                                 .addGap(18, 18, 18)
+                                                .addComponent(cont)
+                                                .addGap(18, 18, 18)
                                                 .addComponent(stop)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(shot))
+                                                .addComponent(shot)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(score))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addContainerGap()
                                                 .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,8 +210,11 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(ready)
+                                        .addComponent(cont)
                                         .addComponent(stop)
-                                        .addComponent(shot))
+                                        .addComponent(shot)
+                                        .addComponent(score)
+                                )
                                 .addGap(20, 20, 20))
         );
 
@@ -197,7 +226,7 @@ public class MainFrame extends javax.swing.JFrame {
         ObjectDTO objectDTO = new ObjectDTO(TypeObjectDTO.READY, name, "");
         Gson gson = GsonFactory.getInstance();
         String data = gson.toJson(objectDTO);
-        System.out.println("Send: " + data);
+//        System.out.println("Send: " + data);
         out.println(data);
 
         try {
@@ -220,6 +249,7 @@ public class MainFrame extends javax.swing.JFrame {
         myThread.setStart(false);
         stop.setEnabled(false);
         ready.setEnabled(true);
+        cont.setEnabled(true);
 
     }
 
@@ -278,5 +308,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel score2;
     private javax.swing.JButton shot;
     private javax.swing.JButton stop;
+    private javax.swing.JButton cont;
+    private javax.swing.JButton score;
 
 }

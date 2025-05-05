@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Services;
 
 import com.google.gson.Gson;
 import lombok.NoArgsConstructor;

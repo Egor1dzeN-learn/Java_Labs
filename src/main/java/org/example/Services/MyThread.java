@@ -1,7 +1,8 @@
-package org.example;
+package org.example.Services;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.MainFrame;
 
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
@@ -15,10 +16,11 @@ public class MyThread extends Thread {
     private MainFrame mainFrame;
     private boolean shot;
     private boolean start = false;
+    private boolean cont = false;
     private BufferedReader in;
     private PrintWriter out;
 
-    MyThread(MyCanvas myCanvas) {
+    public MyThread(MyCanvas myCanvas) {
         this.myCanvas = myCanvas;
     }
 
@@ -31,9 +33,15 @@ public class MyThread extends Thread {
             myCanvas.setStart(start);
             if (shot) {
                 myCanvas.actionPerformed(new ActionEvent(new Object(), 0, "shot"));
+                System.out.println("Start: "+myCanvas.start);
+
                 shot = false;
             } else {
                 myCanvas.actionPerformed(null);
+            }
+            if (!myCanvas.isStart()) {
+                System.out.println("Win");
+//                return;
             }
             try {
                 Thread.sleep(Duration.ofMillis(10));
