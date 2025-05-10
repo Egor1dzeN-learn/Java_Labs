@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
@@ -27,8 +28,33 @@ public class Server {
     public static final int NEED_SCORE = 10;
     private static final PlayerRepositories playerRepositories = new PlayerRepositories();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(PLAYER_COUNT);
+
+        new Thread(()-> {
+            try (ServerSocket serverSocket = new ServerSocket(8081)) {
+
+                while (true) {
+                    try (Socket clientSocket = serverSocket.accept();
+                         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+
+                        System.out.println("New client connected");
+
+                        // Получаем всех игроков из БД
+                        List<PlayerDB> players = playerRepositories.findAll();
+
+                        // Конвертируем в JSON и отправляем клиенту
+                        Gson gson = new Gson();
+                        String jsonResponse = gson.toJson(players);
+                        out.println(jsonResponse);
+
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
         try (ServerSocket serverSocket = new ServerSocket(8080)) {
             System.out.println("Server is working, " + serverSocket.getLocalSocketAddress());
             while (true) {
@@ -67,7 +93,6 @@ public class Server {
 //                            System.out.println(playerList == null);
 
 
-
 //                            System.out.println("New player " + player + ", current list: " + playerList);
                         }
                         while (true) {
@@ -83,13 +108,13 @@ public class Server {
                             out.println(gson.toJson(playerList));
 //                            System.out.println("Send player list " + playerList);
 //                            System.out.println("count: "+player.getCountShot());
-                            if (player.getScore() >= Server.NEED_SCORE){
+                            if (player.getScore() >= Server.NEED_SCORE) {
                                 playerRepositories.incScore(player.getName());
                                 return;
                             }
                             for (Player player_ : playerList) {
-                                if (player_.getScore() >= Server.NEED_SCORE){
-                                    System.out.println(player_.getName() +" win!!");
+                                if (player_.getScore() >= Server.NEED_SCORE) {
+                                    System.out.println(player_.getName() + " win!!");
                                     return;
                                 }
                             }

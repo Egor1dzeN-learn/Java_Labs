@@ -3,11 +3,11 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <!-- PostgreSQL connection settings -->
+        <!-- PostgreSQL's connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
         <property name="connection.username">postgres</property>
-        <property name="connection.password">postgres</property>
+        <property name="connection.password">Partner25</property>
 
         <!-- PostgreSQL dialect -->
         <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>

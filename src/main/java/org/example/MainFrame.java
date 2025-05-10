@@ -103,6 +103,7 @@ public class MainFrame extends javax.swing.JFrame {
         score.setText("Таблица игроков");
         score.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
+
                 new ScoreTable().setVisible(true);
             }
         });
